@@ -12,6 +12,9 @@ output:
 require(tidyverse)
 require(tigerstats)
 avast <-read.csv(file="avastivironal.csv",header=TRUE)
+avastIV = filter(avast, Ivdrug == 'user')
+avastFEM = filter(avast, sex=='F')
+avastLBGT = filter(avast, LBGT=='yes')
 ```
 
 # Introduction
@@ -19,10 +22,6 @@ avast <-read.csv(file="avastivironal.csv",header=TRUE)
 <!--In this section you explain what you are trying to show.  Where did the data come from?  What is the research or other question you are trying to answer?.  If you skimp in this section expect to be marked down in your grade. Paint a picture of the project a couple of paragraphs is expected!--> 
 
 A new  preventative aides (abacavirinol) is under test in clinical trials to keep AIDs from occuring so now we want to know whether or not the vaccine wil be effective to patients across the board and consider how the vaccine will effect in different subgroups. 
-
-By doing this we will give a placebo and 
-
-
 
 The first question is this: Does abacarvirinol have any affect on whether one contracts AIDS or not?
 
@@ -69,6 +68,7 @@ Here is the bar plot, numerical summary, and chi-squared test results
 ```{r}
 barchartGC(~infected+treatment, data=avast, type='percent')
 ```
+
 The bar chart shows that the vaccine did have some effect.The incidence of aids is smaller than who got the vaccine than the ones who didn't.
 
 
@@ -88,6 +88,8 @@ The numerical results shows that there's is a higher result for the people who h
 chisqtestGC(~infected+treatment, data=avast)
 ```
 
+The chisqtest results show that the p-value is 0 and there's a higher result for the people who have aids that took the placebo than the people who have aids.
+
 
 #Results Gender Effectiveness 
 Does gender have an effect?
@@ -96,31 +98,36 @@ Does gender have an effect?
 
 ## Descriptive Results
 
+Here is the bar plot, numerical summary, and chi-squared test results
+
 ### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question. Bottom line is to explain the features of the graph that are relevant to conforming or departing to what is expected by your null hypothesis !-->
 
 ```{r}
-barchartGC(~infected+sex, data=avast, type='percent')
+barchartGC(~infected+treatment, data=avastFEM, type='percent')
 ```
 
-
+The bar chart shows that about 58% who recieved the vaccine indeed got aids, and about 48% who recieved the vaccine didn't get aids. Now the people who took the placebo, 40% did get aids and about 50% didn't get aids. 
 
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ```{r}
-xtabs(~infected+sex, data=avast)
+xtabs(~infected+treatment, data=avastFEM)
 ```
+The nummerical summary shows that there was a higher result for the females who took the vaccine and got aids than the females who took the placebo and didn't get aids.
 
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
 
 ```{r}
-chisqtestGC(~infected+sex, data=avast)
+chisqtestGC(~infected+treatment, data=avastFEM)
 ```
+
+The chi-squared chart shows that the females that received the drug had a high probability of contracting aids so it would be best if woman did not get the treatment. It’s significant in the wrong direction, if it worked it would reduce the odds ratio, but it did not work because it incresed the odds of getting aids.
 
 #Results IV Drug Use effectiveness 
 Does the IV drug use make a difference in vaccine effectiveness?
@@ -129,30 +136,37 @@ Does the IV drug use make a difference in vaccine effectiveness?
 
 ## Descriptive Results
 
+Here is the bar plot, numerical summary, and chi-squared test results
+
 ### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question. Bottom line is to explain the features of the graph that are relevant to conforming or departing to what is expected by your null hypothesis !-->
 
 ```{r}
-barchartGC(~infected+Ivdrug, data=avast, type='percent')
+barchartGC(~infected+treatment, data=avastIV, type='percent')
 ```
 
+The bar chart shows that the people who are IV drugs users who took the vaccine, about 70% of them got aids and about 45% didn't. The users who took the placebo, about 25% of them got aids and 48% of them didn't.
 
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ```{r}
-xtabs(~infected+Ivdrug, data=avast)
+xtabs(~infected+treatment, data=avastIV)
 ```
+
+The nummerical summary shows that there were more users who recieved the vaccine and got the aids than the ones who took the plaebo. And there were more users who didn't didn't get aids that took the placebo.
 
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
 
 ```{r}
-chisqtestGC(~infected+Ivdrug, data=avast)
+chisqtestGC(~infected+treatment, data=avastIV)
 ```
+
+The chi-squared chart shows that the P value is 0. The p-value was 0, so we reject the null hypothesis which was it does not make a difference because it does make make a difference.
 
 #Results Sexual Orientation effectiveness
 Does sexual oreintation make a difference in vaccine effectiveness?
@@ -161,13 +175,17 @@ Does sexual oreintation make a difference in vaccine effectiveness?
 
 ## Descriptive Results
 
+Here is the bar plot, numerical summary, and chi-squared test results
+
 ### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question. Bottom line is to explain the features of the graph that are relevant to conforming or departing to what is expected by your null hypothesis !-->
 
 ```{r}
-barchartGC(~infected+LBGT, data=avast, type='percent')
+barchartGC(~infected+treatment, data=avastLBGT, type='percent')
 ```
+
+This bar chart here shows that the lgbt users got aids by taking the placebo than the ones who got the vaccine. They should definitely get the treatment.
 
 
 ### Numerical Descriptive Results
@@ -175,18 +193,25 @@ barchartGC(~infected+LBGT, data=avast, type='percent')
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ```{r}
-xtabs(~infected+LBGT, data=avast)
+xtabs(~infected+treatment, data=avastLBGT)
 ```
+
+The nummerical summary shows that the LGBT people got aids from taking the placebo. The LGBT population should take the treatment because it signifacntly reduces aids infection.
 
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
 
 ```{r}
-chisqtestGC(~infected+LBGT, data=avast)
+chisqtestGC(~infected+treatment, data=avastLBGT)
 ```
+
+The chi-squared results show that the p-value is 0 and the LBGT community should take the vaccine because it will decrease their chances of contracting aids.
 
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+
+LBGT The results demonstrate that the vaccine is very effective in the LBGT population. The null hypothesis was that sexual orientation does not effect the effectiveness of the vaccine.
+The vaccine looks like it is somewhat effective on the general population. It seems to be unaffected by gender or Sexual orientation. The testing indicates we reject the null hypotheses and accept that the vaccine appears to have some positive effect, which is slightly less for some subgroups including IV drug users.
 
